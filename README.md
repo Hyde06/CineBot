@@ -12,6 +12,7 @@ An AI-powered movie chatbot and recommendation system that combines natural lang
 
 - Python 3.8 or higher
 - Hugging Face API key (get it from [Hugging Face](https://huggingface.co/settings/tokens))
+- Jupyter Notebook (for data preparation)
 
 ## Setup
 
@@ -33,13 +34,25 @@ pip install -r app_new/requirements.txt
    HUGGINGFACE_API_KEY=your_api_key_here
    ```
 
-4. Download the required data files:
-   - Place the following files in the `app_new/app_data` directory:
-     - `movie_metadata.csv`
-     - `ratings_metadata.csv`
-     - `movie_chunk_metadata.json`
-     - `st_embeddings.npy`
-     - `svd_embeddings.npy`
+4. Prepare the required data files:
+   - Create the `app_data` directory in `app_new` if it doesn't exist:
+   ```bash
+   mkdir -p app_new/app_data
+   ```
+
+   - Run the Jupyter notebooks in the `notebooks` directory in the following order:
+     1. `1_data_preparation.ipynb`: Creates `movie_metadata.csv` and `ratings_metadata.csv`
+     2. `2_create_chunks.ipynb`: Generates `movie_chunk_metadata.json`
+     3. `3_generate_embeddings.ipynb`: Creates `st_embeddings.npy` and `svd_embeddings.npy`
+
+   - After running the notebooks, ensure the following files are in `app_new/app_data/`:
+     - `movie_metadata.csv`: Contains movie information (title, year, genres, etc.)
+     - `ratings_metadata.csv`: Contains user ratings data
+     - `movie_chunk_metadata.json`: Contains processed movie chunks for RAG
+     - `st_embeddings.npy`: Sentence Transformer embeddings for content-based recommendations
+     - `svd_embeddings.npy`: SVD embeddings for collaborative filtering
+
+   Note: The notebooks will automatically save the generated files to the correct location.
 
 ## Running the Application
 
@@ -69,6 +82,25 @@ streamlit run Home.py
    - Search for a movie
    - Get both content-based and collaborative filtering recommendations
    - View detailed information about recommended movies
+
+## Data Preparation Details
+
+The application requires several data files that are generated using Jupyter notebooks. Here's what each notebook does:
+
+1. **1_data_preparation.ipynb**:
+   - Processes raw movie data
+   - Creates movie metadata with titles, years, genres, etc.
+   - Generates ratings metadata for collaborative filtering
+
+2. **2_create_chunks.ipynb**:
+   - Processes movie descriptions and metadata
+   - Creates chunks for the RAG system
+   - Generates movie_chunk_metadata.json
+
+3. **3_generate_embeddings.ipynb**:
+   - Creates Sentence Transformer embeddings for content-based recommendations
+   - Generates SVD embeddings for collaborative filtering
+   - Saves embeddings in the correct format
 
 ## Note
 
